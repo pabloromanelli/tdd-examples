@@ -1,16 +1,12 @@
 package smx.tdd;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-import java.io.*;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import static org.mockito.Mockito.*;
 
 /**
  * Requerimientos:
@@ -25,10 +21,8 @@ import static org.mockito.Mockito.*;
  * </ul>
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CellDuplicatorTest {
+public class MyCellTest {
 
-	@Mock
-	private Workbook workbook;
 	@Mock
 	private Sheet sheet;
 	@Mock
@@ -39,19 +33,20 @@ public class CellDuplicatorTest {
 	private Cell c3;
 	@Mock
 	private Cell d6;
-	
+
 	@Test
-	public void puedoCopiarUnaCelda() throws InvalidFormatException, IOException {
-		when(workbook.getSheetAt(0)).thenReturn(sheet);
+	public void puedoCopiarUnaCelda() {
 		when(sheet.getRow(2)).thenReturn(row3);
 		when(sheet.createRow(5)).thenReturn(row6);
 		when(row3.getCell(2)).thenReturn(c3);
 		when(row6.createCell(3)).thenReturn(d6);
 		when(c3.getStringCellValue()).thenReturn("some value");
-		
-		CellDuplicator cellDuplicator = new CellDuplicator(workbook);
-		cellDuplicator.copy(0, "C", 3, "D", 6);
-		
+
+		MyCell origen = new MyCell(sheet, "C", 3);
+		MyCell destino = new MyCell(sheet, "D", 6);
+
+		destino.setStringValue(origen.getStringValue());
+
 		verify(d6).setCellValue("some value");
 	}
 

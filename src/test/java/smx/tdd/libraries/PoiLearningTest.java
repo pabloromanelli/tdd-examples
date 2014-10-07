@@ -6,6 +6,7 @@ import java.io.*;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.*;
 import org.junit.Test;
 
 public class PoiLearningTest {
@@ -37,4 +38,35 @@ public class PoiLearningTest {
 			assertEquals("C3", D6.getStringCellValue());
 		}
 	}
+
+	@Test
+	public void puedoLeerUnNamedRange() throws InvalidFormatException, IOException {
+		try (InputStream excelFile = getClass().getResourceAsStream("excel-file.xlsx")) {
+			Workbook workbook = WorkbookFactory.create(excelFile);
+			Name name = workbook.getName("some_range");
+			AreaReference areaReference = new AreaReference(name.getRefersToFormula());
+
+			CellReference firstCell = areaReference.getFirstCell();
+			assertEquals(firstCell.getCol(), 0); // A
+			assertEquals(firstCell.getRow(), 3); // 4
+
+			CellReference lastCell = areaReference.getLastCell();
+			assertEquals(lastCell.getCol(), 2); // C
+			assertEquals(lastCell.getRow(), 4); // 5
+		}
+	}
+
+	@Test
+	public void puedoVerificarSiUnaRegionEsContigua() throws InvalidFormatException, IOException {
+		try (InputStream excelFile = getClass().getResourceAsStream("excel-file.xlsx")) {
+			Workbook workbook = WorkbookFactory.create(excelFile);
+
+			Name contigua = workbook.getName("some_range");
+			assertTrue(AreaReference.isContiguous(contigua.getRefersToFormula()));
+
+			Name noContigua = workbook.getName("no_contigua");
+			assertFalse(AreaReference.isContiguous(noContigua.getRefersToFormula()));
+		}
+	}
+
 }

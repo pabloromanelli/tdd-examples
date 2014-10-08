@@ -3,11 +3,14 @@ package smx.tdd;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.*;
 
+import com.google.inject.Inject;
+
 public class RegionCopier {
 
 	private final AreaReferenceProvider areaReferenceProvider;
 	private final AreaReferenceCopier areaReferenceCopier;
 
+	@Inject
 	public RegionCopier( //
 		AreaReferenceProvider areaReferenceProvider,
 		AreaReferenceCopier areaReferenceCopier) {

@@ -5,17 +5,15 @@ import java.io.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
-import smx.tdd.RegionCopier.AreaReferenceProvider;
+import com.google.inject.Inject;
 
 public class RegionCopierFacade {
 
 	private RegionCopier regionCopier;
 
-	public RegionCopierFacade() {
-		CellCopier cellCopier = new CellCopier();
-		AreaReferenceCopier areaReferenceCopier = new AreaReferenceCopier(cellCopier);
-		AreaReferenceProvider areaReferenceProvider = new AreaReferenceProvider();
-		regionCopier = new RegionCopier(areaReferenceProvider, areaReferenceCopier);
+	@Inject
+	public RegionCopierFacade(RegionCopier regionCopier) {
+		this.regionCopier = regionCopier;
 	}
 
 	public void copy(InputStream excelFile, String rangeName, Position to, OutputStream resultFile) {

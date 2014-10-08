@@ -53,6 +53,8 @@ public class PoiLearningTest {
 			CellReference lastCell = areaReference.getLastCell();
 			assertEquals(lastCell.getCol(), 2); // C
 			assertEquals(lastCell.getRow(), 4); // 5
+
+			assertEquals(6, areaReference.getAllReferencedCells().length);
 		}
 	}
 
